@@ -18,21 +18,28 @@ const ProductPage = () => {
                   <th>Name</th>
                   <th>Variant/color</th>
                   <th>Category</th>
+                  <th>Description</th>
+                  <th>Price</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <th>1</th>
-                  <td>Cy Ganderton</td>
-                  <td>Quality Control Specialist</td>
-                  <td>Littel, Schaden and Vandervort</td>
+                  <td>Hijab 1</td>
+                  <td>Warna Coklat</td>
+                  <td>Hijab</td>
+                  <td>bahan adem </td>
+                  <td>20000</td>
                   <td>
                     <div className="flex space-x-3">
                       <FontAwesomeIcon
                         className="hover:cursor-pointer"
                         icon={faPen}
                         style={{ color: "#ff9e00" }}
+                        onClick={() =>
+                          document.getElementById("my_modal_3").showModal()
+                        }
                       />
                       <FontAwesomeIcon
                         className="hover:cursor-pointer"
