@@ -64,9 +64,102 @@ const ProductPage = () => {
           </dialog>
 
           {/* button add */}
-          <button className="btn btn-active btn-info text-base-100 px-14">
+          <button
+            className="btn btn-active btn-info text-base-100 px-14"
+            onClick={() => document.getElementById("my_modal_3").showModal()}
+          >
             Add Product
           </button>
+
+          {/* modal add product */}
+          <dialog id="my_modal_3" className="modal">
+            <div className="modal-box">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  ✕
+                </button>
+              </form>
+              <h3 className="font-bold text-lg">Add Product</h3>
+
+              <form className="flex flex-col">
+                <div className="flex space-x-3">
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label">
+                      <span className="label-text">Product Name</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="type here"
+                      className="input input-bordered w-full"
+                    />
+                    <div className="label">
+                      <span className="label-text">SKU</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="type here"
+                      className="input input-bordered w-full"
+                    />
+                  </label>
+
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label">
+                      <span className="label-text">Category</span>
+                    </div>
+                    <select className="select select-bordered">
+                      <option disabled selected>
+                        Pick one
+                      </option>
+                      <option>Star Wars</option>
+                      <option>Harry Potter</option>
+                      <option>Lord of the Rings</option>
+                      <option>Planet of the Apes</option>
+                      <option>Star Trek</option>
+                    </select>
+
+                    <div className="label">
+                      <span className="label-text">Variant</span>
+                    </div>
+                    <select className="select select-bordered">
+                      <option disabled selected>
+                        Pick one
+                      </option>
+                      <option>Star Wars</option>
+                      <option>Harry Potter</option>
+                      <option>Lord of the Rings</option>
+                      <option>Planet of the Apes</option>
+                      <option>Star Trek</option>
+                    </select>
+                  </label>
+                </div>
+
+                <label className="form-control">
+                  <div className="label">
+                    <span className="label-text">Description</span>
+                  </div>
+                  <textarea
+                    className="textarea textarea-bordered h-24"
+                    placeholder="type here"
+                  ></textarea>
+                </label>
+
+                <label className="form-control w-full ">
+                  <div className="label">
+                    <span className="label-text">Price</span>
+                  </div>
+                  <input
+                    type="number"
+                    placeholder="type here"
+                    className="input input-bordered w-full "
+                  />
+                </label>
+                <button type="submit" className="btn btn-accent mt-4">
+                  Submit
+                </button>
+              </form>
+            </div>
+          </dialog>
         </div>
       </div>
     </>

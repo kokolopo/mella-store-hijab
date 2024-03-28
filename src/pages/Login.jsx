@@ -1,5 +1,6 @@
 import React from "react";
 import image from "../assets/image_login.png";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
@@ -17,26 +18,26 @@ const Login = () => {
               Mella Hijab
             </div>
             <div className="w-full">
-              <form className="flex flex-col space-y-3">
+              <form className="flex flex-col space-y-5">
                 <input
                   type="text"
-                  id="default-input"
                   placeholder="Email"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-secondary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="input py-5 shadow-md input-sm   w-full max-w-xs"
+                  required
                 />
 
                 <input
                   type="password"
-                  id="default-input"
                   placeholder="Password"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-secondary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="input py-5 shadow-md input-sm   w-full max-w-xs"
+                  required
                 />
 
                 <button
-                  type="button"
-                  class="focus:outline-none text-base-100 text-xl bg-[#86C8BC] focus:ring-4 focus:ring-purple-300 font-medium rounded-lg px-5 py-2.5 mb-2 w-full"
+                  type="submit"
+                  className="focus:outline-none text-base-100 text-xl bg-[#86C8BC] focus:ring-4 focus:ring-purple-300 font-medium rounded-lg px-5 py-2 mb-2 w-full"
                 >
-                  Masuk
+                  <Link to={"/"}>Masuk</Link>
                 </button>
               </form>
             </div>
