@@ -1,9 +1,121 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import useProduct from "../states/useProduct";
+import useCategory from "../states/useCategory";
+import useVariant from "../states/useVariant";
 
 const ProductPage = () => {
+  const { data, loading, error, fetchProduct, postProduct, responsePost } =
+    useProduct();
+
+  const { fetchCategory, categories } = useCategory();
+  const { fetchVariant, variants } = useVariant();
+
+  const [input, setInput] = useState({
+    product_name: "",
+    sku: "",
+    desc: "",
+    category_id: null,
+    variant_id: null,
+    price: null,
+  });
+
+  useEffect(() => {
+    fetchProduct();
+    fetchCategory();
+    fetchVariant();
+  }, [responsePost]);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    if (name == "category_id" || name == "variant_id" || name == "price") {
+      setInput({
+        ...input,
+        [name]: parseInt(value),
+      });
+    } else {
+      setInput({
+        ...input,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    postProduct(input);
+    console.log(input);
+    setInput({
+      ...input,
+      ["product_name"]: "",
+      ["sku"]: "",
+      ["desc"]: "",
+      ["category_id"]: null,
+      ["variant_id"]: null,
+      ["price"]: null,
+    });
+    fetchProduct();
+  };
+
+  const listProduct =
+    data &&
+    data.map((product, index) => (
+      <tr key={index}>
+        <th>{index + 1}</th>
+        <td>{product.product_name}</td>
+        <td>{product.variant.name}</td>
+        <td>{product.category.name}</td>
+        <td>{product.desc}</td>
+        <td>{product.price}</td>
+        <td>
+          <div className="flex space-x-3">
+            <FontAwesomeIcon
+              className="hover:cursor-pointer"
+              icon={faPen}
+              style={{ color: "#ff9e00" }}
+              onClick={() => document.getElementById("my_modal_3").showModal()}
+            />
+            <FontAwesomeIcon
+              className="hover:cursor-pointer"
+              icon={faTrash}
+              style={{ color: "#ff1540" }}
+              onClick={() =>
+                document.getElementById("my_modal_remove").showModal()
+              }
+            />
+          </div>
+        </td>
+      </tr>
+    ));
+
+  const listCategory =
+    categories &&
+    categories.map((category) => (
+      <option key={category.id} value={category.id}>
+        {category.name}
+      </option>
+    ));
+
+  const listVariant =
+    variants &&
+    variants.map((variant) => (
+      <option key={variant.id} value={variant.id}>
+        {variant.name}
+      </option>
+    ));
+
+  if (loading) {
+    return <div className="flex items-center justify-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <>
       <div className="flex">
@@ -23,36 +135,7 @@ const ProductPage = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Hijab 1</td>
-                  <td>Warna Coklat</td>
-                  <td>Hijab</td>
-                  <td>bahan adem </td>
-                  <td>20000</td>
-                  <td>
-                    <div className="flex space-x-3">
-                      <FontAwesomeIcon
-                        className="hover:cursor-pointer"
-                        icon={faPen}
-                        style={{ color: "#ff9e00" }}
-                        onClick={() =>
-                          document.getElementById("my_modal_3").showModal()
-                        }
-                      />
-                      <FontAwesomeIcon
-                        className="hover:cursor-pointer"
-                        icon={faTrash}
-                        style={{ color: "#ff1540" }}
-                        onClick={() =>
-                          document.getElementById("my_modal_remove").showModal()
-                        }
-                      />
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+              <tbody>{data && listProduct}</tbody>
             </table>
           </div>
 
@@ -89,7 +172,7 @@ const ProductPage = () => {
               </form>
               <h3 className="font-bold text-lg">Add Product</h3>
 
-              <form className="flex flex-col">
+              <form className="flex flex-col" onSubmit={handleFormSubmit}>
                 <div className="flex space-x-3">
                   <label className="form-control w-full max-w-xs">
                     <div className="label">
@@ -99,6 +182,9 @@ const ProductPage = () => {
                       type="text"
                       placeholder="type here"
                       className="input input-bordered w-full"
+                      name="product_name"
+                      value={input.product_name}
+                      onChange={handleInputChange}
                     />
                     <div className="label">
                       <span className="label-text">SKU</span>
@@ -107,6 +193,9 @@ const ProductPage = () => {
                       type="text"
                       placeholder="type here"
                       className="input input-bordered w-full"
+                      name="sku"
+                      value={input.sku}
+                      onChange={handleInputChange}
                     />
                   </label>
 
@@ -114,29 +203,31 @@ const ProductPage = () => {
                     <div className="label">
                       <span className="label-text">Category</span>
                     </div>
-                    <select className="select select-bordered">
+                    <select
+                      className="select select-bordered"
+                      name="category_id"
+                      value={input.category_id}
+                      onChange={handleInputChange}
+                    >
                       <option disabled selected>
                         Pick one
                       </option>
-                      <option>Star Wars</option>
-                      <option>Harry Potter</option>
-                      <option>Lord of the Rings</option>
-                      <option>Planet of the Apes</option>
-                      <option>Star Trek</option>
+                      {categories && listCategory}
                     </select>
 
                     <div className="label">
                       <span className="label-text">Variant</span>
                     </div>
-                    <select className="select select-bordered">
+                    <select
+                      className="select select-bordered"
+                      name="variant_id"
+                      value={input.variant_id}
+                      onChange={handleInputChange}
+                    >
                       <option disabled selected>
                         Pick one
                       </option>
-                      <option>Star Wars</option>
-                      <option>Harry Potter</option>
-                      <option>Lord of the Rings</option>
-                      <option>Planet of the Apes</option>
-                      <option>Star Trek</option>
+                      {variants && listVariant}
                     </select>
                   </label>
                 </div>
@@ -148,6 +239,9 @@ const ProductPage = () => {
                   <textarea
                     className="textarea textarea-bordered h-24"
                     placeholder="type here"
+                    name="desc"
+                    value={input.desc}
+                    onChange={handleInputChange}
                   ></textarea>
                 </label>
 
@@ -159,6 +253,9 @@ const ProductPage = () => {
                     type="number"
                     placeholder="type here"
                     className="input input-bordered w-full "
+                    name="price"
+                    value={input.price}
+                    onChange={handleInputChange}
                   />
                 </label>
                 <button type="submit" className="btn btn-accent mt-4">

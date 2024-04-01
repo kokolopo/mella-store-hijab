@@ -28,22 +28,28 @@ const Sidebar = () => {
           Mella Hijab
         </div>
 
-        <ul className="menu p-4 w-80 min-h-full bg-base2 font-semibold text-xl text-base-100">
+        <ul className="menu p-4 w-80 h-[90vh] bg-base2  font-semibold text-xl text-base-100 flex flex-col justify-between">
           {/* Sidebar content here */}
-          <li>
-            <Link to={`/`}>Dashboard</Link>
-          </li>
-          <li>
-            <Link to={`/products`}>Product</Link>
-          </li>
-          <li>
-            <Link to={`/categories`}>Category</Link>
-          </li>
-          <li>
-            <Link to={`/variants`}>Variant</Link>
-          </li>
-          <li>
-            <Link to={`/transactions`}>Transaction</Link>
+          <div className="">
+            <li>
+              <Link to={`/`}>Dashboard</Link>
+            </li>
+            <li>
+              <Link to={`/products`}>Product</Link>
+            </li>
+            <li>
+              <Link to={`/categories`}>Category</Link>
+            </li>
+            <li>
+              <Link to={`/variants`}>Variant</Link>
+            </li>
+            <li>
+              <Link to={`/transactions`}>Transaction</Link>
+            </li>
+          </div>
+
+          <li className="mb-10">
+            <Link to={`/login`}>Logout</Link>
           </li>
         </ul>
       </div>

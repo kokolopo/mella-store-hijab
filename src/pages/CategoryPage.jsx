@@ -1,9 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import useCategory from "../states/useCategory";
 
 const CategoryPage = () => {
+  const { data, loading, error, fetchCategory, postCategory, responsePost } =
+    useCategory();
+
+  const [input, setInput] = useState({
+    name: "",
+    desc: "",
+  });
+
+  useEffect(() => {
+    fetchCategory();
+  }, [responsePost]);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    postCategory(input);
+    setInput({
+      ...input,
+      ["name"]: "",
+      ["desc"]: "",
+    });
+    fetchCategory();
+  };
+
+  const listCategory =
+    data &&
+    data.map((category, index) => (
+      <tr key={index}>
+        <th>{index + 1}</th>
+        <td>{category.name}</td>
+        <td>{category.desc}</td>
+        <td>
+          <div className="flex space-x-3">
+            <FontAwesomeIcon
+              className="hover:cursor-pointer"
+              icon={faPen}
+              style={{ color: "#ff9e00" }}
+              onClick={() => document.getElementById("my_modal_3").showModal()}
+            />
+            <FontAwesomeIcon
+              className="hover:cursor-pointer"
+              icon={faTrash}
+              style={{ color: "#ff1540" }}
+              onClick={() =>
+                document.getElementById("my_modal_remove").showModal()
+              }
+            />
+          </div>
+        </td>
+      </tr>
+    ));
+
+  if (loading) {
+    return <div className="flex items-center justify-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <>
       <div className="flex">
@@ -20,33 +90,7 @@ const CategoryPage = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Category 1</td>
-                  <td>Hijab</td>
-                  <td>
-                    <div className="flex space-x-3">
-                      <FontAwesomeIcon
-                        className="hover:cursor-pointer"
-                        icon={faPen}
-                        style={{ color: "#ff9e00" }}
-                        onClick={() =>
-                          document.getElementById("my_modal_3").showModal()
-                        }
-                      />
-                      <FontAwesomeIcon
-                        className="hover:cursor-pointer"
-                        icon={faTrash}
-                        style={{ color: "#ff1540" }}
-                        onClick={() =>
-                          document.getElementById("my_modal_remove").showModal()
-                        }
-                      />
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+              <tbody>{data && listCategory}</tbody>
             </table>
           </div>
 
@@ -72,18 +116,17 @@ const CategoryPage = () => {
             Add Category
           </button>
 
-          {/* modal add variant */}
+          {/* modal add category */}
           <dialog id="my_modal_3" className="modal">
             <div className="modal-box">
               <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                   ✕
                 </button>
               </form>
               <h3 className="font-bold text-lg">Add Category</h3>
 
-              <form className="flex flex-col">
+              <form className="flex flex-col" onSubmit={handleFormSubmit}>
                 <label className="form-control w-full ">
                   <div className="label">
                     <span className="label-text">Category Name</span>
@@ -92,6 +135,9 @@ const CategoryPage = () => {
                     type="text"
                     placeholder="type here"
                     className="input input-bordered w-full "
+                    name="name"
+                    value={input.name}
+                    onChange={handleInputChange}
                   />
                 </label>
 
@@ -102,6 +148,9 @@ const CategoryPage = () => {
                   <textarea
                     className="textarea textarea-bordered h-24"
                     placeholder="type here"
+                    name="desc"
+                    value={input.desc}
+                    onChange={handleInputChange}
                   ></textarea>
                 </label>
 
