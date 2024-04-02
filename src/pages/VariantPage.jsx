@@ -3,8 +3,10 @@ import Sidebar from "../components/Sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useVariant from "../states/useVariant";
+import Cookies from "js-cookie";
 
 const VariantPage = () => {
+  const token = Cookies.get("token");
   const { data, loading, error, responsePost, fetchVariant, postVariant } =
     useVariant();
 
@@ -14,7 +16,7 @@ const VariantPage = () => {
   });
 
   useEffect(() => {
-    fetchVariant();
+    fetchVariant(token);
   }, [responsePost]);
 
   const handleInputChange = (event) => {
@@ -29,13 +31,12 @@ const VariantPage = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    postVariant(input);
+    postVariant(input, token);
     setInput({
       ...input,
       ["name"]: "",
       ["desc"]: "",
     });
-    fetchVariant();
   };
 
   const listVariant =

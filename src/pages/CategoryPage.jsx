@@ -3,8 +3,10 @@ import Sidebar from "../components/Sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useCategory from "../states/useCategory";
+import Cookies from "js-cookie";
 
 const CategoryPage = () => {
+  const token = Cookies.get("token");
   const { data, loading, error, fetchCategory, postCategory, responsePost } =
     useCategory();
 
@@ -14,7 +16,7 @@ const CategoryPage = () => {
   });
 
   useEffect(() => {
-    fetchCategory();
+    fetchCategory(token);
   }, [responsePost]);
 
   const handleInputChange = (event) => {
@@ -29,42 +31,13 @@ const CategoryPage = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    postCategory(input);
+    postCategory(input, token);
     setInput({
       ...input,
       ["name"]: "",
       ["desc"]: "",
     });
-    fetchCategory();
   };
-
-  const listCategory =
-    data &&
-    data.map((category, index) => (
-      <tr key={index}>
-        <th>{index + 1}</th>
-        <td>{category.name}</td>
-        <td>{category.desc}</td>
-        <td>
-          <div className="flex space-x-3">
-            <FontAwesomeIcon
-              className="hover:cursor-pointer"
-              icon={faPen}
-              style={{ color: "#ff9e00" }}
-              onClick={() => document.getElementById("my_modal_3").showModal()}
-            />
-            <FontAwesomeIcon
-              className="hover:cursor-pointer"
-              icon={faTrash}
-              style={{ color: "#ff1540" }}
-              onClick={() =>
-                document.getElementById("my_modal_remove").showModal()
-              }
-            />
-          </div>
-        </td>
-      </tr>
-    ));
 
   if (loading) {
     return <div className="flex items-center justify-center">Loading...</div>;
@@ -90,7 +63,38 @@ const CategoryPage = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>{data && listCategory}</tbody>
+              <tbody>
+                {data &&
+                  data.map((category, index) => (
+                    <tr key={index}>
+                      <th>{index + 1}</th>
+                      <td>{category.name}</td>
+                      <td>{category.desc}</td>
+                      <td>
+                        <div className="flex space-x-3">
+                          <FontAwesomeIcon
+                            className="hover:cursor-pointer"
+                            icon={faPen}
+                            style={{ color: "#ff9e00" }}
+                            onClick={() =>
+                              document.getElementById("my_modal_3").showModal()
+                            }
+                          />
+                          <FontAwesomeIcon
+                            className="hover:cursor-pointer"
+                            icon={faTrash}
+                            style={{ color: "#ff1540" }}
+                            onClick={() =>
+                              document
+                                .getElementById("my_modal_remove")
+                                .showModal()
+                            }
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
             </table>
           </div>
 

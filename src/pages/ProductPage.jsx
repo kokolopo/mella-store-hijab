@@ -5,8 +5,10 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useProduct from "../states/useProduct";
 import useCategory from "../states/useCategory";
 import useVariant from "../states/useVariant";
+import Cookies from "js-cookie";
 
 const ProductPage = () => {
+  const token = Cookies.get("token");
   const { data, loading, error, fetchProduct, postProduct, responsePost } =
     useProduct();
 
@@ -23,9 +25,9 @@ const ProductPage = () => {
   });
 
   useEffect(() => {
-    fetchProduct();
-    fetchCategory();
-    fetchVariant();
+    fetchProduct(token);
+    fetchCategory(token);
+    fetchVariant(token);
   }, [responsePost]);
 
   const handleInputChange = (event) => {
@@ -47,8 +49,7 @@ const ProductPage = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    postProduct(input);
-    console.log(input);
+    postProduct(input, token);
     setInput({
       ...input,
       ["product_name"]: "",
@@ -58,7 +59,6 @@ const ProductPage = () => {
       ["variant_id"]: null,
       ["price"]: null,
     });
-    fetchProduct();
   };
 
   const listProduct =

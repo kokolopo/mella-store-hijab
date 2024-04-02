@@ -8,11 +8,15 @@ const useProduct = create((set) => ({
   error: null,
   responsePost: null,
 
-  fetchProduct: async () => {
+  fetchProduct: async (jwt) => {
     set({ loading: true });
 
     try {
-      const data = await axios.get(`${import.meta.env.VITE_API_URL}products`);
+      const data = await axios.get(`${import.meta.env.VITE_API_URL}products`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
       set({ loading: false });
       set({ data: await data.data.data });
     } catch (error) {
@@ -21,12 +25,17 @@ const useProduct = create((set) => ({
     }
   },
 
-  postProduct: async (input) => {
+  postProduct: async (input, jwt) => {
     set({ loading: true });
     try {
       const data = await axios.post(
         `${import.meta.env.VITE_API_URL}products`,
-        input
+        input,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
       );
       set({ loading: false });
       set({ responsePost: data });

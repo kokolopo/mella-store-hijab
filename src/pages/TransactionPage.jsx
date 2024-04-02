@@ -50,7 +50,6 @@ const TransactionPage = () => {
         setTypeError("Please select only excel file type!");
         setExcelFile(null);
       }
-      console.log(selectedFile.type);
     } else {
       console.log("please select file");
     }

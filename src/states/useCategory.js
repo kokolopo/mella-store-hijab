@@ -9,11 +9,19 @@ const useCategory = create((set) => ({
   responsePost: null,
   categories: null,
 
-  fetchCategory: async () => {
+  fetchCategory: async (jwt) => {
     set({ loading: true });
 
     try {
-      const data = await axios.get(`${import.meta.env.VITE_API_URL}categories`);
+      const data = await axios.get(
+        `${import.meta.env.VITE_API_URL}categories`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
       set({ loading: false });
       set({ data: await data.data.data });
       set({ categories: await data.data.data });
@@ -23,12 +31,17 @@ const useCategory = create((set) => ({
     }
   },
 
-  postCategory: async (input) => {
+  postCategory: async (input, jwt) => {
     set({ loading: true });
     try {
       const data = await axios.post(
         `${import.meta.env.VITE_API_URL}categories`,
-        input
+        input,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
       );
       set({ loading: false });
       set({ responsePost: await data });

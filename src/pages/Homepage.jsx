@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 
 const Homepage = () => {
@@ -6,7 +6,7 @@ const Homepage = () => {
     <>
       <div className="flex">
         <Sidebar />
-        <div className="bg-base1">default dashboard</div>
+        <div className="bg-base1">default</div>
       </div>
     </>
   );

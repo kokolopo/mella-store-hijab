@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -49,7 +50,9 @@ const Sidebar = () => {
           </div>
 
           <li className="mb-10">
-            <Link to={`/login`}>Logout</Link>
+            <Link to={`/login`} onClick={() => Cookies.remove("token")}>
+              Logout
+            </Link>
           </li>
         </ul>
       </div>

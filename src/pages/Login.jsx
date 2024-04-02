@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import image from "../assets/image_login.png";
-import { Link, useNavigate } from "react-router-dom";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const Login = () => {
           password,
         }
       );
+      Cookies.set("token", response.data.token);
       navigate("/");
     } catch (error) {
       console.error(error.response);
@@ -63,7 +64,6 @@ const Login = () => {
                   type="submit"
                   className="focus:outline-none text-base-100 text-xl bg-[#86C8BC] focus:ring-4 focus:ring-purple-300 font-medium rounded-lg px-5 py-2 mb-2 w-full"
                 >
-                  {/* <Link to={"/"}>Masuk</Link> */}
                   Masuk
                 </button>
               </form>
